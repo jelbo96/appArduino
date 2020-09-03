@@ -1,0 +1,12 @@
+{
+  "name": "appArduino",
+  "displayName": "appArduino",
+  "expo": {
+    "name": "appArduino",
+    "slug": "appArduino",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

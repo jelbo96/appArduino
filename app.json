@@ -3,10 +3,17 @@
   "displayName": "appArduino",
   "expo": {
     "name": "appArduino",
+    "icon": "./imgs/logo.png",
     "slug": "appArduino",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "ios": {
+      "bundleIdentifier": "com.jelbo.appArduino",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.jelbo.appArduino",
+      "versionCode": 1
+    },
+    "assetBundlePatterns": ["**/*"]
   }
 }

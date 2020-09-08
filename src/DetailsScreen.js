@@ -3,10 +3,13 @@ import { ScrollView, StyleSheet, Text } from 'react-native';
 
 import Constants from 'expo-constants';
 
+import TextWithProps from './TextWithProps';
+
 function HomeScreen() {
   return (
     <ScrollView style={styles.container}>
       <Text>Pantalla de Detalles</Text>
+      <TextWithProps x="ignacio" y="jelvez" />
     </ScrollView>
   );
 }

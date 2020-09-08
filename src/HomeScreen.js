@@ -3,11 +3,14 @@ import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
 
 import Constants from 'expo-constants';
 
+const PrintAlgo = (x) => console.log(x);
+
 function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <Text>Pantalla de Inicio</Text>
+
         <Text>
           Parrafo 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis orci
           quis interdum euismod. Pellentesque dui eros, fringilla vitae dignissim at, finibus vitae
@@ -44,6 +47,8 @@ function HomeScreen() {
           magnis dis parturient montes, nascetur ridiculus mus. Morbi hendrerit odio id gravida
           aliquam. Nunc enim ex, volutpat eget sapien sit amet, lobortis dapibus magna.
         </Text>
+
+        {PrintAlgo('hola')}
       </ScrollView>
     </SafeAreaView>
   );

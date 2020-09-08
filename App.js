@@ -4,6 +4,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { registerRootComponent } from 'expo';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -37,9 +38,9 @@ function App() {
           inactiveTintColor: '#8e8e93'
         }}
       >
+        <Tab.Screen name="Test" component={TestView} />
         <Tab.Screen name="Inicio" component={HomeScreen} />
         <Tab.Screen name="Detalles" component={DetailsScreen} />
-        <Tab.Screen name="Test" component={TestView} />
       </Tab.Navigator>
     </NavigationContainer>
   );

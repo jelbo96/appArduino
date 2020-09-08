@@ -6,6 +6,9 @@
     "icon": "./imgs/logo.png",
     "slug": "appArduino",
     "version": "1.0.0",
+    "splash": {
+      "image": "./imgs/splash_screen.png"
+    },
     "ios": {
       "bundleIdentifier": "com.jelbo.appArduino",
       "buildNumber": "1.0.0"

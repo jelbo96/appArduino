@@ -22,6 +22,7 @@ const TestView = () => {
   const [humidity, setHumidity] = useState('...');
   const [temperature, setTemperature] = useState('...');
   const [light, setLight] = useState('...');
+  const [lastUpdate, setLastUpdate] = useState('...');
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -34,7 +35,8 @@ const TestView = () => {
       .once('value', function (snapshot) {
         snapshot.forEach((child) => {
           // La hora es child.key
-          // console.log('humedad');
+          // console.log(child.key);
+          setLastUpdate(child.key);
           setHumidity([child.val()]);
         });
       });
@@ -104,12 +106,12 @@ const TestView = () => {
                 <Ionicons name="ios-sunny" size={16} color="black" />
                 <Text> Luminosidad</Text>
               </View>
-              <Text style={styles.numberDataText}>{light} % </Text>
+              <Text style={styles.numberDataText}>{light} </Text>
             </Body>
           </CardItem>
         </Card>
 
-        <Text> Ultima actualización: Hace X minutos </Text>
+        <Text> Ultima actualización: {lastUpdate} </Text>
       </ScrollView>
     </SafeAreaView>
   );

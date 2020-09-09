@@ -1,67 +1,175 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
-
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, SafeAreaView, ScrollView, View, RefreshControl } from 'react-native';
+import { Card, CardItem, Body, Text } from 'native-base';
 import Constants from 'expo-constants';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
-const PrintAlgo = (x) => console.log(x);
+import * as firebase from 'firebase';
 
-function HomeScreen() {
+import TimeAgo from 'react-native-timeago';
+
+const moment = require('moment');
+require('moment/locale/es');
+
+moment.locale('es');
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDDD_3NmUFE8EzlxstSCtNmc1FoxWXIX9s',
+  authDomain: 'test-arduino-d6faa.firebaseapp.com',
+  databaseURL: 'https://test-arduino-d6faa.firebaseio.com',
+  projectId: 'test-arduino-d6faa',
+  storageBucket: 'test-arduino-d6faa.appspot.com',
+  messagingSenderId: '145095714021',
+  appId: '1:145095714021:web:c840d52103f57bd878e00c'
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const HomeScreen = () => {
+  const [humidity, setHumidity] = useState('...');
+  const [temperature, setTemperature] = useState('...');
+  const [light, setLight] = useState('...');
+  const [lastUpdate, setLastUpdate] = useState('...');
+  const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    console.log('useEffect');
+    // Humedad
+    const refHumidity = firebase.database().ref('sensor/humidity');
+    refHumidity
+      .orderByKey()
+      .limitToLast(1)
+      .once('value', function (snapshot) {
+        snapshot.forEach((child) => {
+          // La hora es child.key
+          // console.log(child.key);
+          setLastUpdate(child.key);
+          setHumidity([child.val()]);
+        });
+      });
+
+    // Temperatura
+    const refTemperature = firebase.database().ref('sensor/temperature');
+    refTemperature
+      .orderByKey()
+      .limitToLast(1)
+      .once('value', function (snapshot) {
+        console.log(snapshot);
+        snapshot.forEach((child) => {
+          // console.log('temperatura');
+          setTemperature([child.val()]);
+        });
+      });
+
+    // Luz
+    const refLight = firebase.database().ref('sensor/light');
+    refLight
+      .orderByKey()
+      .limitToLast(1)
+      .once('value', function (snapshot) {
+        snapshot.forEach((child) => {
+          // console.log('light');
+          setLight([child.val()]);
+        });
+      });
+
+    // Siempre setear update en false (cambiarlo cuando se pida actualizar)
+    setRefreshing(false);
+  }, [refreshing]);
+
+  /*   const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  }; */
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    /*     wait(2000).then(() => setRefreshing(false)); */
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <Text>Pantalla de Inicio</Text>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        <Text style={styles.titleText}>Inicio</Text>
 
-        <Text>
-          Parrafo 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis orci
-          quis interdum euismod. Pellentesque dui eros, fringilla vitae dignissim at, finibus vitae
-          nisi. Pellentesque interdum risus scelerisque condimentum sodales. Sed convallis
-          ullamcorper faucibus. Nulla facilisis venenatis ligula pharetra dictum. Etiam lacinia
-          ultrices lectus ut placerat. Fusce ac vestibulum nisl. Donec iaculis, dui vel commodo
-          hendrerit, quam magna aliquet libero, in eleifend nulla sem in ante. Proin laoreet commodo
-          iaculis. Pellentesque sed posuere ex. Fusce a velit laoreet felis lacinia finibus at eu
-          tortor. Vivamus feugiat cursus mollis. Nulla blandit, eros a maximus mollis, mi enim
-          facilisis massa, et tincidunt eros metus sit amet erat. Sed ut consequat ligula. Quisque
-          ut purus eget ante imperdiet scelerisque. Etiam aliquet, lorem non vestibulum malesuada,
-          dolor ante sodales leo, vitae maximus nisl erat sed nunc. Sed laoreet rhoncus purus, id
-          tempus ex viverra eget. Aenean non vulputate quam. In dictum leo nec fringilla posuere.
-          Aliquam dignissim aliquet sapien at auctor. Interdum et malesuada fames ac ante ipsum
-          primis in faucibus. In hac habitasse platea dictumst. Orci varius natoque penatibus et
-          magnis dis parturient montes, nascetur ridiculus mus. Morbi hendrerit odio id gravida
-          aliquam. Nunc enim ex, volutpat eget sapien sit amet, lobortis dapibus magna.
-        </Text>
-        <Text>
-          Parrafo 2: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis orci
-          quis interdum euismod. Pellentesque dui eros, fringilla vitae dignissim at, finibus vitae
-          nisi. Pellentesque interdum risus scelerisque condimentum sodales. Sed convallis
-          ullamcorper faucibus. Nulla facilisis venenatis ligula pharetra dictum. Etiam lacinia
-          ultrices lectus ut placerat. Fusce ac vestibulum nisl. Donec iaculis, dui vel commodo
-          hendrerit, quam magna aliquet libero, in eleifend nulla sem in ante. Proin laoreet commodo
-          iaculis. Pellentesque sed posuere ex. Fusce a velit laoreet felis lacinia finibus at eu
-          tortor. Vivamus feugiat cursus mollis. Nulla blandit, eros a maximus mollis, mi enim
-          facilisis massa, et tincidunt eros metus sit amet erat. Sed ut consequat ligula. Quisque
-          ut purus eget ante imperdiet scelerisque. Etiam aliquet, lorem non vestibulum malesuada,
-          dolor ante sodales leo, vitae maximus nisl erat sed nunc. Sed laoreet rhoncus purus, id
-          tempus ex viverra eget. Aenean non vulputate quam. In dictum leo nec fringilla posuere.
-          Aliquam dignissim aliquet sapien at auctor. Interdum et malesuada fames ac ante ipsum
-          primis in faucibus. In hac habitasse platea dictumst. Orci varius natoque penatibus et
-          magnis dis parturient montes, nascetur ridiculus mus. Morbi hendrerit odio id gravida
-          aliquam. Nunc enim ex, volutpat eget sapien sit amet, lobortis dapibus magna.
-        </Text>
+        <Card>
+          <CardItem>
+            <Body>
+              <View style={styles.inline}>
+                <FontAwesome5 name="temperature-low" size={16} color="black" />
+                <Text> Temperatura</Text>
+              </View>
+              <Text style={styles.numberDataText}>{temperature} °C </Text>
+            </Body>
+          </CardItem>
+        </Card>
 
-        {PrintAlgo('hola')}
+        <Card>
+          <CardItem>
+            <Body>
+              <View style={styles.inline}>
+                <Ionicons name="ios-water" size={16} color="black" />
+                <Text> Humedad</Text>
+              </View>
+              <Text style={styles.numberDataText}>{humidity} % </Text>
+            </Body>
+          </CardItem>
+        </Card>
+
+        <Card>
+          <CardItem>
+            <Body>
+              <View style={styles.inline}>
+                <Ionicons name="ios-sunny" size={16} color="black" />
+                <Text> Luminosidad</Text>
+              </View>
+
+              <Text style={styles.numberDataText}>
+                {light} <Text> (0-1024)</Text>{' '}
+              </Text>
+            </Body>
+          </CardItem>
+        </Card>
       </ScrollView>
+      <Text style={styles.centerText}>
+        Ultima actualización: <TimeAgo time={lastUpdate} />
+      </Text>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight,
+    flex: 1
   },
   scrollView: {
-    // backgroundColor: 'white'
+    padding: 20,
+    paddingTop: 35
+    // backgroundColor: 'pink'
     // marginHorizontal: 20
+  },
+  titleText: {
+    fontSize: 42,
+    fontWeight: 'bold'
+  },
+  numberDataText: {
+    fontSize: 60,
+    fontWeight: 'bold'
+  },
+  inline: {
+    // Meter propiedades de inline aqui
+    flexDirection: 'row',
+    alignSelf: 'flex-start'
+  },
+  centerText: {
+    textAlign: 'center',
+    paddingBottom: 5
   }
 });
 

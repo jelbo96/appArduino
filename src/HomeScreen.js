@@ -6,9 +6,8 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
 import * as firebase from 'firebase';
 
-import TimeAgo from 'react-native-timeago';
+import moment from 'moment';
 
-const moment = require('moment');
 require('moment/locale/es');
 
 moment.locale('es');
@@ -29,64 +28,34 @@ const HomeScreen = () => {
   const [humidity, setHumidity] = useState('...');
   const [temperature, setTemperature] = useState('...');
   const [light, setLight] = useState('...');
-  const [lastUpdate, setLastUpdate] = useState('...');
+  const [lastUpdateText, setLastUpdateText] = useState('...');
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     console.log('useEffect');
-    // Humedad
-    const refHumidity = firebase.database().ref('sensor/humidity');
-    refHumidity
+
+    const refAll = firebase.database().ref('sensor2/');
+    refAll
       .orderByKey()
       .limitToLast(1)
       .once('value', function (snapshot) {
         snapshot.forEach((child) => {
-          // La hora es child.key
-          // console.log(child.key);
-          setLastUpdate(child.key);
-          setHumidity([child.val()]);
+          const value = child.val();
+          setTemperature([value.temperature]);
+          setHumidity([value.humidity]);
+          setLight([value.light.toFixed(2)]);
+
+          const date = new Date(value.timestamp * 1000).toISOString();
+
+          setLastUpdateText([moment(date).fromNow()]);
         });
       });
-
-    // Temperatura
-    const refTemperature = firebase.database().ref('sensor/temperature');
-    refTemperature
-      .orderByKey()
-      .limitToLast(1)
-      .once('value', function (snapshot) {
-        console.log(snapshot);
-        snapshot.forEach((child) => {
-          // console.log('temperatura');
-          setTemperature([child.val()]);
-        });
-      });
-
-    // Luz
-    const refLight = firebase.database().ref('sensor/light');
-    refLight
-      .orderByKey()
-      .limitToLast(1)
-      .once('value', function (snapshot) {
-        snapshot.forEach((child) => {
-          // console.log('light');
-          setLight([child.val()]);
-        });
-      });
-
     // Siempre setear update en false (cambiarlo cuando se pida actualizar)
     setRefreshing(false);
   }, [refreshing]);
 
-  /*   const wait = (timeout) => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, timeout);
-    });
-  }; */
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-
-    /*     wait(2000).then(() => setRefreshing(false)); */
   }, []);
 
   return (
@@ -130,15 +99,13 @@ const HomeScreen = () => {
               </View>
 
               <Text style={styles.numberDataText}>
-                {light} <Text> (0-1024)</Text>{' '}
+                {light} %<Text> </Text>{' '}
               </Text>
             </Body>
           </CardItem>
         </Card>
       </ScrollView>
-      <Text style={styles.centerText}>
-        Ultima actualización: <TimeAgo time={lastUpdate} />
-      </Text>
+      <Text style={styles.centerText}>Ultima actualización: {lastUpdateText}</Text>
     </SafeAreaView>
   );
 };

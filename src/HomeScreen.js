@@ -2,56 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, View, RefreshControl } from 'react-native';
 import { Card, CardItem, Body, Text } from 'native-base';
 import Constants from 'expo-constants';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
-import * as firebase from 'firebase';
-
-import moment from 'moment';
-
-require('moment/locale/es');
-
-moment.locale('es');
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyDDD_3NmUFE8EzlxstSCtNmc1FoxWXIX9s',
-  authDomain: 'test-arduino-d6faa.firebaseapp.com',
-  databaseURL: 'https://test-arduino-d6faa.firebaseio.com',
-  projectId: 'test-arduino-d6faa',
-  storageBucket: 'test-arduino-d6faa.appspot.com',
-  messagingSenderId: '145095714021',
-  appId: '1:145095714021:web:c840d52103f57bd878e00c'
-};
-
-firebase.initializeApp(firebaseConfig);
+import StateCards from './StateCards';
 
 const HomeScreen = () => {
-  const [humidity, setHumidity] = useState('...');
-  const [temperature, setTemperature] = useState('...');
-  const [light, setLight] = useState('...');
-  const [lastUpdateText, setLastUpdateText] = useState('...');
   const [refreshing, setRefreshing] = useState(false);
+  const [dataSensor, setDataSensor] = useState([
+    { name: 'loading', temp: '...', hum: '...', light: '...', time: '...' }
+  ]);
 
   useEffect(() => {
-    console.log('useEffect');
-
-    const refAll = firebase.database().ref('sensor2/');
-    refAll
-      .orderByKey()
-      .limitToLast(1)
-      .once('value', function (snapshot) {
-        snapshot.forEach((child) => {
-          const value = child.val();
-          setTemperature([value.temperature]);
-          setHumidity([value.humidity]);
-          setLight([value.light.toFixed(2)]);
-
-          const date = new Date(value.timestamp * 1000).toISOString();
-
-          setLastUpdateText([moment(date).fromNow()]);
-        });
-      });
-    // Siempre setear update en false (cambiarlo cuando se pida actualizar)
+    // console.log('useEffect- typeofData:', typeof dataSensor);
     setRefreshing(false);
+
+    // La data se tiene que obtener y guardar en este formato
+    setDataSensor([
+      { name: 'Sensor 1', temp: '12', hum: '13', light: '10', time: '0' },
+      { name: 'Sensor 2', temp: '22', hum: '23', light: '20', time: '0' }
+    ]);
+
+    // dataSensor.push({ name: 'Sensor 3', temp: '13', hum: '14', light: '50', time: '20' });
+    // setDataSensor(dataSensor);
+    dataSensor.map((testData) => console.log(testData.name));
   }, [refreshing]);
 
   const onRefresh = React.useCallback(() => {
@@ -65,47 +37,18 @@ const HomeScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <Text style={styles.titleText}>Inicio</Text>
-
-        <Card>
-          <CardItem>
-            <Body>
-              <View style={styles.inline}>
-                <FontAwesome5 name="temperature-low" size={16} color="black" />
-                <Text> Temperatura</Text>
-              </View>
-              <Text style={styles.numberDataText}>{temperature} °C </Text>
-            </Body>
-          </CardItem>
-        </Card>
-
-        <Card>
-          <CardItem>
-            <Body>
-              <View style={styles.inline}>
-                <Ionicons name="ios-water" size={16} color="black" />
-                <Text> Humedad</Text>
-              </View>
-              <Text style={styles.numberDataText}>{humidity} % </Text>
-            </Body>
-          </CardItem>
-        </Card>
-
-        <Card>
-          <CardItem>
-            <Body>
-              <View style={styles.inline}>
-                <Ionicons name="ios-sunny" size={16} color="black" />
-                <Text> Luminosidad</Text>
-              </View>
-
-              <Text style={styles.numberDataText}>
-                {light} %<Text> </Text>{' '}
-              </Text>
-            </Body>
-          </CardItem>
-        </Card>
+        {/* console.log(dataSensor) */}
+        {dataSensor.map((data) => (
+          <StateCards
+            key={data.name}
+            name={data.name}
+            temp={data.temp}
+            hum={data.hum}
+            lum={data.light}
+            time={data.time}
+          />
+        ))}
       </ScrollView>
-      <Text style={styles.centerText}>Ultima actualización: {lastUpdateText}</Text>
     </SafeAreaView>
   );
 };
@@ -118,22 +61,13 @@ const styles = StyleSheet.create({
   scrollView: {
     padding: 20,
     paddingTop: 35
-    // backgroundColor: 'pink'
-    // marginHorizontal: 20
   },
   titleText: {
     fontSize: 42,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingBottom: 15
   },
-  numberDataText: {
-    fontSize: 60,
-    fontWeight: 'bold'
-  },
-  inline: {
-    // Meter propiedades de inline aqui
-    flexDirection: 'row',
-    alignSelf: 'flex-start'
-  },
+
   centerText: {
     textAlign: 'center',
     paddingBottom: 5

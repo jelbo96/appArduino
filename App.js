@@ -38,9 +38,9 @@ function App() {
           inactiveTintColor: '#8e8e93'
         }}
       >
+        <Tab.Screen name="Detalles" component={DetailsScreen} />
         <Tab.Screen name="Inicio" component={HomeScreen} />
         {/* <Tab.Screen name="Test" component={TestView} /> */}
-        <Tab.Screen name="Detalles" component={DetailsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

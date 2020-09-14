@@ -9,9 +9,8 @@ const SettingsScreen = () => {
       <View style={styles.scrollView}>
         <Text style={styles.titleText}>Configuraciones</Text>
         <Text>
-          {' '}
           Esta es la vista de Configuraciones, aqui podra seleccionar los sensores que desea que se
-          vean en la app.{' '}
+          vean en la app.
         </Text>
       </View>
     </SafeAreaView>

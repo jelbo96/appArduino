@@ -26,8 +26,8 @@ function App() {
               iconName = 'ios-home';
             } else if (route.name === 'Detalles') {
               iconName = 'ios-analytics';
-            } else if (route.name === 'Test') {
-              iconName = 'ios-funnel';
+            } else if (route.name === 'Configuración') {
+              iconName = 'ios-settings';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -41,7 +41,7 @@ function App() {
         <Tab.Screen name="Inicio" component={HomeScreen} />
         <Tab.Screen name="Detalles" component={DetailsScreen} />
 
-        <Tab.Screen name="Cofiguración" component={SettingsScreen} />
+        <Tab.Screen name="Configuración" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -11,6 +11,8 @@ import {
   ToastAndroid
 } from 'react-native';
 
+import Constants from 'expo-constants';
+
 const widthConst = Dimensions.get('screen').width;
 
 export default function DetailsScreen() {
@@ -67,23 +69,31 @@ export default function DetailsScreen() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={listData}
-        renderItem={({ item }) => <Item title={item.title} image={item.image} />}
-        keyExtractor={(item) => item.id}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        contentContainerStyle={styles.list}
-      />
-      <View style={styles.enappdWrapper} />
+      <View style={styles.viewContainer}>
+        <Text style={styles.titleText}>Detalles</Text>
+        <FlatList
+          data={listData}
+          renderItem={({ item }) => <Item title={item.title} image={item.image} />}
+          keyExtractor={(item) => item.id}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          contentContainerStyle={styles.list}
+        />
+        <View style={styles.enappdWrapper} />
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: Constants.statusBarHeight,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  viewContainer: {
+    padding: 20,
+    paddingTop: 35
   },
   scrollView: {
     flex: 1,
@@ -116,5 +126,10 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingLeft: 10,
     fontSize: 18
+  },
+  titleText: {
+    fontSize: 42,
+    fontWeight: 'bold',
+    paddingBottom: 15
   }
 });

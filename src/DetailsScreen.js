@@ -1,110 +1,118 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Card, CardItem, Body, Text, Button } from 'native-base';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import React from 'react';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Image,
+  View,
+  FlatList,
+  Dimensions,
+  ToastAndroid
+} from 'react-native';
 
-import Constants from 'expo-constants';
+const widthConst = Dimensions.get('screen').width;
 
-import * as firebase from 'firebase';
+export default function DetailsScreen() {
+  const initialData = [
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+      title: 'Susan Bert',
+      image: '1'
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+      title: 'Neil Arms',
+      image: '2'
+    },
+    {
+      id: '58694a0f-3da1-471f-bd96-145571e29d72',
+      title: 'Carla Neice',
+      image: '3'
+    },
+    {
+      id: 'bd7acbea-c1b1-46c2-aed5-3ad53cbb28ba',
+      title: 'Janice Hanner',
+      image: '4'
+    },
+    {
+      id: '3ac68afc-c605-48d3-a4f8-fcd91aa97f63',
+      title: 'James Sullivan',
+      image: '5'
+    }
+  ];
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [listData, setListData] = React.useState(initialData);
 
-import moment from 'moment';
-import TextWithProps from './TextWithProps';
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
 
-require('moment/locale/es');
-
-moment.locale('es');
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyDDD_3NmUFE8EzlxstSCtNmc1FoxWXIX9s',
-  authDomain: 'test-arduino-d6faa.firebaseapp.com',
-  databaseURL: 'https://test-arduino-d6faa.firebaseio.com',
-  projectId: 'test-arduino-d6faa',
-  storageBucket: 'test-arduino-d6faa.appspot.com',
-  messagingSenderId: '145095714021',
-  appId: '1:145095714021:web:c840d52103f57bd878e00c'
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const DetailsScreen = (props) => {
-  const [refreshing, setRefreshing] = useState(false);
-
-  const [sensorDataArray, setSensorDataArray] = useState([]);
-
-  useEffect(() => {
-    const getData = (nameSensors) => {
-      // Extraer los nombres de los sensores
-      console.log('Get Data - Name Sensors', nameSensors);
-
-      nameSensors.map((sensor) => {
-        console.log(sensor);
-
-        const refAll = firebase.database().ref(`${sensor}/`);
-        refAll
-          .orderByKey()
-          .limitToLast(1)
-          .once('value', function (snapshot) {
-            snapshot.forEach((child) => {
-              const value = child.val();
-
-              const sensorData = {
-                name: sensor,
-                temp: value.temperature,
-                hum: value.humidity,
-                light: value.light.toFixed(2),
-                time: moment(new Date(value.timestamp * 1000).toISOString()).fromNow()
-              };
-
-              console.log(sensorData);
-            });
-          });
-      });
-    };
-
-    const getNameSensors = () => {
-      firebase
-        .database()
-        .ref('/availableSensors')
-        .once('value')
-        .then(function (snapshot) {
-          getData(snapshot.val());
-        });
-    };
-
-    getNameSensors();
-    console.log('array', sensorDataArray);
+    const response = await fetch(
+      'http://www.mocky.io/v2/5e3315753200008abe94d3d8?mocky-delay=2000ms'
+    );
+    const responseJson = await response.json();
+    console.log(responseJson);
+    setListData(responseJson.result.concat(initialData));
+    setRefreshing(false);
   }, [refreshing]);
 
-  const onRefresh = React.useCallback(() => {
-    console.log('se oprimio el boton');
-    setRefreshing(true);
-  }, []);
-
+  function Item({ title, image }) {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.itemText}>{title}</Text>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Text> {sensorDataArray} </Text>
-       */}
-      <Button onPress={onRefresh}>
-        <Text>Recargar </Text>
-      </Button>
+      <FlatList
+        data={listData}
+        renderItem={({ item }) => <Item title={item.title} image={item.image} />}
+        keyExtractor={(item) => item.id}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        contentContainerStyle={styles.list}
+      />
+      <View style={styles.enappdWrapper} />
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#eeeeee'
+  },
+  list: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: widthConst,
     flex: 1
   },
-  numberDataText: {
-    fontSize: 60,
-    fontWeight: 'bold'
+  enappdWrapper: {
+    position: 'absolute',
+    bottom: 0
   },
-  inline: {
-    // Meter propiedades de inline aqui
+
+  item: {
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+    paddingTop: 20
+  },
+  thumbnail: {
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#aaa'
+  },
+  itemText: {
+    paddingTop: 5,
+    paddingLeft: 10,
+    fontSize: 18
   }
 });
-
-export default DetailsScreen;

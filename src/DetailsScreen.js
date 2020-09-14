@@ -52,7 +52,9 @@ export default function DetailsScreen() {
     );
     const responseJson = await response.json();
     console.log(responseJson);
+
     setListData(responseJson.result.concat(initialData));
+
     setRefreshing(false);
   }, [refreshing]);
 

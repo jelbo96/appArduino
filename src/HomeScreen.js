@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, View, RefreshControl } from 'react-native';
-import { Card, CardItem, Body, Text, Button } from 'native-base';
+import { StyleSheet, SafeAreaView, ScrollView, RefreshControl } from 'react-native';
+import { Text } from 'native-base';
 import Constants from 'expo-constants';
 
 import * as firebase from 'firebase';
@@ -36,7 +36,6 @@ const HomeScreen = () => {
     console.log('Get Data - Name Sensors', nameSensors);
 
     nameSensors.map((sensor) => {
-      /* console.log(sensor); */
       setSensorDataArray([]);
       const refAll = firebase.database().ref(`${sensor}/`);
 
@@ -60,7 +59,6 @@ const HomeScreen = () => {
           });
         });
     });
-    setRefreshing(false);
   };
 
   const getNameSensors = () => {
@@ -74,15 +72,14 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    console.log('-------------------------------------------------------');
-
     getNameSensors();
-    console.log('array: ', sensorDataArray);
-  }, [refreshing]);
+  }, []);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-  });
+    getNameSensors();
+    setRefreshing(false);
+  }, [refreshing]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,9 +100,6 @@ const HomeScreen = () => {
           />
         ))}
       </ScrollView>
-      {/* <Button onPress={() => setCount(count + 1)}>
-        <Text>Recargar </Text>
-      </Button> */}
     </SafeAreaView>
   );
 };

@@ -28,12 +28,11 @@ if (!firebase.apps.length) {
 
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [count, setCount] = useState(0);
   const [sensorDataArray, setSensorDataArray] = useState([]);
 
   const getData = (nameSensors) => {
     // Extraer los nombres de los sensores
-    console.log('Get Data - Name Sensors', nameSensors);
+    /*   console.log('Get Data - Name Sensors', nameSensors); */
 
     nameSensors.map((sensor) => {
       setSensorDataArray([]);
@@ -53,7 +52,7 @@ const HomeScreen = () => {
               light: value.light.toFixed(2),
               time: moment(new Date(value.timestamp * 1000).toISOString()).fromNow()
             };
-            console.log('se esta agregando data ....');
+            /*  console.log('se esta agregando data ....'); */
 
             setSensorDataArray((sensorDataArray) => sensorDataArray.concat(sensorData));
           });
@@ -64,10 +63,10 @@ const HomeScreen = () => {
   const getNameSensors = () => {
     firebase
       .database()
-      .ref('/availableSensors')
+      .ref('/nameSensors')
       .once('value')
       .then(function (snapshot) {
-        getData(snapshot.val());
+        getData(Object.keys(snapshot.val()));
       });
   };
 

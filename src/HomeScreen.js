@@ -69,7 +69,7 @@ const HomeScreen = () => {
         const snapshotValue = snapshot.val();
         const nameSensorsAvailable = [];
         Object.keys(snapshotValue).map((key) => {
-          if (snapshotValue[key] === 1) {
+          if (snapshotValue[key] == true) {
             nameSensorsAvailable.push(key);
           }
         });

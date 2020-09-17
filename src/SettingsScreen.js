@@ -25,7 +25,7 @@ const SettingsScreen = () => {
   const getNameSensors = () => {
     firebase
       .database()
-      .ref('/nameSensors')
+      .ref('/nameSensors/sensors')
       .once('value')
       .then(function (snapshot) {
         setSensors(snapshot.val());
@@ -46,6 +46,23 @@ const SettingsScreen = () => {
 
   const updateSensorsAvailable = () => {
     console.log('update sensors:', sensors);
+
+    firebase
+      .database()
+      .ref('nameSensors/')
+      .set(
+        {
+          sensors
+        },
+        function (error) {
+          if (error) {
+            console.log('error en guardar data');
+          } else {
+            // Data saved successfully!
+            console.log('data guardada satisfactoriamente');
+          }
+        }
+      );
   };
 
   useEffect(() => {

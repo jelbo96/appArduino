@@ -63,7 +63,7 @@ const HomeScreen = () => {
   const getNameSensors = () => {
     firebase
       .database()
-      .ref('/nameSensors')
+      .ref('/nameSensors/sensors')
       .once('value')
       .then(function (snapshot) {
         const snapshotValue = snapshot.val();

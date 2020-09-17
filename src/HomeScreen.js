@@ -66,7 +66,14 @@ const HomeScreen = () => {
       .ref('/nameSensors')
       .once('value')
       .then(function (snapshot) {
-        getData(Object.keys(snapshot.val()));
+        const snapshotValue = snapshot.val();
+        const nameSensorsAvailable = [];
+        Object.keys(snapshotValue).map((key) => {
+          if (snapshotValue[key] === 1) {
+            nameSensorsAvailable.push(key);
+          }
+        });
+        getData(nameSensorsAvailable);
       });
   };
 

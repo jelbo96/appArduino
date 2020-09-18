@@ -5,8 +5,7 @@ const TextWithProps = (props) => {
   return (
     <View>
       <Text style={styles.textStyle}>
-        {' '}
-        Hola {props.x} - {props.y}{' '}
+        Hola {props.x} - {props.y}
       </Text>
     </View>
   );

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, View, ScrollView } from 'react-native';
-import { Container, Header, Content, ListItem, CheckBox, Text, Body, Button } from 'native-base';
+import { StyleSheet, SafeAreaView, View, ScrollView, Switch } from 'react-native';
+import { ListItem, Text, Body, Button } from 'native-base';
 import Constants from 'expo-constants';
 import * as firebase from 'firebase';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
-import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -93,13 +91,22 @@ const SettingsScreen = () => {
         ))} */}
           {Object.keys(sensors).map((key) => (
             <ListItem key={key}>
-              <CheckBox
+              {/*  {<CheckBox
                 checked={sensors[key]}
                 onPress={() => {
                   changeValue(key);
-                  /*    forceUpdate(); */
+              
                   cambiarEstadoCheckbox();
                 }}
+              />} */}
+
+              <Switch
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={() => {
+                  changeValue(key);
+                  cambiarEstadoCheckbox();
+                }}
+                value={sensors[key]}
               />
               <Body>
                 <Text>{key}</Text>

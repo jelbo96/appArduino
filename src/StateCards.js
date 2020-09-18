@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, CardItem, Body, Text } from 'native-base';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
-import * as firebase from 'firebase';
-
 import moment from 'moment';
-import TextWithProps from './TextWithProps';
 
 require('moment/locale/es');
 

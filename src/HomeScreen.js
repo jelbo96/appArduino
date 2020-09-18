@@ -94,17 +94,21 @@ const HomeScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <Text style={styles.titleText}>Inicio</Text>
-        {/* console.log(dataSensor) */}
-        {sensorDataArray.map((data) => (
-          <StateCards
-            key={data.name} // data.name
-            name={data.name}
-            temp={data.temp}
-            hum={data.hum}
-            lum={data.light}
-            time={data.time}
-          />
-        ))}
+
+        {sensorDataArray.length > 0 ? (
+          sensorDataArray.map((data) => (
+            <StateCards
+              key={data.name} // data.name
+              name={data.name}
+              temp={data.temp}
+              hum={data.hum}
+              lum={data.light}
+              time={data.time}
+            />
+          ))
+        ) : (
+          <Text>No se encontraron datos o no se configuró ningun sensor.</Text>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, SafeAreaView, View, ScrollView, Switch } from 'react-native';
-import { ListItem, Text, Body, Button } from 'native-base';
+import { ListItem, Text, Body, Button, Toast } from 'native-base';
 import Constants from 'expo-constants';
 import * as firebase from 'firebase';
 
@@ -54,10 +54,20 @@ const SettingsScreen = () => {
         },
         function (error) {
           if (error) {
-            console.log('error en guardar data');
+            Toast.show({
+              text: 'Ha ocurrido un error, intentelo nuevamente.',
+              textStyle: { textAlign: 'center' },
+              position: 'bottom',
+              style: { bottom: 30 }
+            });
           } else {
             // Data saved successfully!
-            console.log('data guardada satisfactoriamente');
+            Toast.show({
+              text: 'Se ha guardado la información.',
+              textStyle: { textAlign: 'center' },
+              position: 'bottom',
+              style: { bottom: 30 }
+            });
           }
         }
       );
@@ -101,7 +111,6 @@ const SettingsScreen = () => {
               />} */}
 
               <Switch
-                ios_backgroundColor="#3e3e3e"
                 onValueChange={() => {
                   changeValue(key);
                   cambiarEstadoCheckbox();

@@ -51,7 +51,7 @@ const StateCards = (props) => {
           </Body>
         </CardItem>
       </Card>
-      <Text style={styles.centerText}>
+      <Text style={styles.lastUpdate}>
         Ultima actualización: {props.time} {'\n'}
       </Text>
     </>
@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
     // Meter propiedades de inline aqui
     flexDirection: 'row',
     alignSelf: 'flex-start'
+  },
+  lastUpdate: {
+    fontSize: 12,
+    color: '#616161',
+    left: 5
   }
 });
 

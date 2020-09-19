@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'native-base';
 import { VictoryPie } from 'victory-native';
 
@@ -27,7 +27,7 @@ const TestScreen = (props) => {
   }, [refreshing]);
 
   return (
-    <View /* style={styles.container} */>
+    <View style={styles.container}>
       <Text>
         Se está mostrando graficos para {props.sensorKey} en formato {props.tab}
       </Text>
@@ -46,5 +46,12 @@ const TestScreen = (props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flex: 1
+  }
+});
 
 export default TestScreen;

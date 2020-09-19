@@ -10,22 +10,20 @@ const GraphsScren = ({ route }) => {
   const { sensorKey } = route.params;
   return (
     <Container>
-      {/* <Header hasTabs /> */}
-      <Tabs>
+      <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderBottomColor: '#007bff' }}>
         <Tab
           heading={
-            <TabHeading>
-              <Text>Hora</Text>
+            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
+              <Text style={{ color: 'black' }}>Hora</Text>
             </TabHeading>
           }
         >
           <TestScreen sensorKey={sensorKey} tab="hora" />
-          {/*  <Text> Esta viendo el sensor - {sensorKey} </Text> */}
         </Tab>
         <Tab
           heading={
-            <TabHeading>
-              <Text>Día</Text>
+            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
+              <Text style={{ color: 'black' }}>Día</Text>
             </TabHeading>
           }
         >
@@ -33,8 +31,8 @@ const GraphsScren = ({ route }) => {
         </Tab>
         <Tab
           heading={
-            <TabHeading>
-              <Text>Semana</Text>
+            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
+              <Text style={{ color: 'black' }}>Semana</Text>
             </TabHeading>
           }
         >

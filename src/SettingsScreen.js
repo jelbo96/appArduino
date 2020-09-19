@@ -114,12 +114,11 @@ const SettingsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Constants.statusBarHeight,
+    /*  marginTop: Constants.statusBarHeight, */
     flex: 1
   },
   scrollView: {
-    padding: 20,
-    paddingTop: 0
+    padding: 20
   },
   titleText: {
     fontSize: 42,

@@ -29,6 +29,7 @@ if (!firebase.apps.length) {
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [sensorDataArray, setSensorDataArray] = useState([]);
+  const [message, setMessage] = useState('Cargando...');
 
   const getData = (nameSensors) => {
     // Extraer los nombres de los sensores
@@ -73,6 +74,9 @@ const HomeScreen = () => {
             nameSensorsAvailable.push(key);
           }
         });
+        if (nameSensorsAvailable.length == 0) {
+          setMessage('No se encontraron datos o no se configuró ningun sensor.');
+        }
         getData(nameSensorsAvailable);
       });
   };
@@ -83,6 +87,7 @@ const HomeScreen = () => {
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
+    setMessage('Cargando...');
     getNameSensors();
     setRefreshing(false);
   }, [refreshing]);
@@ -105,7 +110,7 @@ const HomeScreen = () => {
             />
           ))
         ) : (
-          <Text>No se encontraron datos o no se configuró ningun sensor.</Text>
+          <Text>{message}</Text>
         )}
       </ScrollView>
     </SafeAreaView>

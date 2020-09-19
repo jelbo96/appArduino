@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, SafeAreaView, View, ScrollView } from 'react-native';
+import { StyleSheet, SafeAreaView, View, ScrollView, RefreshControl } from 'react-native';
 import { Text, CardItem, Right, Card, Icon } from 'native-base';
 
 import Constants from 'expo-constants';
@@ -11,7 +11,8 @@ if (!firebase.apps.length) {
 }
 
 const DetailsScreen = ({ navigation }) => {
-  const [sensors, setSensors] = useState({});
+  const [sensors, setSensors] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getNameSensors = () => {
     firebase
@@ -19,7 +20,14 @@ const DetailsScreen = ({ navigation }) => {
       .ref('/nameSensors/sensors')
       .once('value')
       .then(function (snapshot) {
-        setSensors(snapshot.val());
+        const snapshotValue = snapshot.val();
+        const nameSensorsAvailable = [];
+        Object.keys(snapshotValue).map((key) => {
+          if (snapshotValue[key] == true) {
+            nameSensorsAvailable.push(key);
+          }
+        });
+        setSensors(nameSensorsAvailable);
       });
   };
 
@@ -27,20 +35,25 @@ const DetailsScreen = ({ navigation }) => {
     getNameSensors();
   }, []);
 
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    getNameSensors();
+    setRefreshing(false);
+  }, [refreshing]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <View style={styles.viewContainer}>
           <Text>Selecciona un sensor para ver mas información. {'\n'}</Text>
 
-          {Object.keys(sensors).map((key) => (
+          {sensors.map((key) => (
             <Card>
               <CardItem
                 header
                 button
                 key={key}
                 onPress={() => {
-                  /* alert('Haz seleccionado el '.concat(key)); */
                   navigation.navigate('Graphs', {
                     sensorKey: key
                   });

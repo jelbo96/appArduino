@@ -93,8 +93,6 @@ const HomeScreen = () => {
         contentContainerStyle={styles.scrollView}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <Text style={styles.titleText}>Inicio</Text>
-
         {sensorDataArray.length > 0 ? (
           sensorDataArray.map((data) => (
             <StateCards
@@ -121,7 +119,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     padding: 20,
-    paddingTop: 35
+    paddingTop: 0
   },
   titleText: {
     fontSize: 42,

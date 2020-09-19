@@ -81,35 +81,14 @@ const SettingsScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.scrollView}>
-          <Text style={styles.titleText}>Configuración</Text>
           <Text>
             Selecciona los sensores que deseas que se muestren en la app, lo que no se seleccionen
             se mantendrán recopilando información.
           </Text>
         </View>
         <View style={styles.viewList}>
-          {/*  {sensors.map((data) => (
-          <>
-            <Text> Hola </Text>
-            <ListItem>
-              <CheckBox checked />
-              <Body>
-                <Text>{data.child.key}</Text>
-              </Body>
-            </ListItem>
-          </>
-        ))} */}
           {Object.keys(sensors).map((key) => (
             <ListItem key={key}>
-              {/*  {<CheckBox
-                checked={sensors[key]}
-                onPress={() => {
-                  changeValue(key);
-              
-                  cambiarEstadoCheckbox();
-                }}
-              />} */}
-
               <Switch
                 onValueChange={() => {
                   changeValue(key);
@@ -140,7 +119,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     padding: 20,
-    paddingTop: 35
+    paddingTop: 0
   },
   titleText: {
     fontSize: 42,

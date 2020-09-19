@@ -1,44 +1,44 @@
 import React from 'react';
 import { Container, Header, Tab, Tabs, TabHeading, Icon, Text } from 'native-base';
+
+import TestScreen from './TestScreen';
 /* import Tab1 from './tabOne';
 import Tab2 from './tabTwo';
 import Tab3 from './tabThree'; */
 
-const GraphsScren = (props) => {
+const GraphsScren = ({ route }) => {
+  const { sensorKey } = route.params;
   return (
     <Container>
-      <Header hasTabs />
+      {/* <Header hasTabs /> */}
       <Tabs>
         <Tab
           heading={
             <TabHeading>
-              <Icon name="camera" />
-              <Text>Camera</Text>
+              <Text>Hora</Text>
             </TabHeading>
           }
         >
-          {/* <Tab1 /> */}
-          <Text> Tab1 </Text>
+          <TestScreen sensorKey={sensorKey} tab="hora" />
+          {/*  <Text> Esta viendo el sensor - {sensorKey} </Text> */}
         </Tab>
         <Tab
           heading={
             <TabHeading>
-              <Text>No Icon</Text>
+              <Text>Día</Text>
             </TabHeading>
           }
         >
-          {/*   <Tab2 /> */}
-          <Text> Tab2 </Text>
+          <TestScreen sensorKey={sensorKey} tab="dia" />
         </Tab>
         <Tab
           heading={
             <TabHeading>
-              <Icon name="apps" />
+              <Text>Semana</Text>
             </TabHeading>
           }
         >
-          {/*  <Tab3 /> */}
-          <Text> Tab3 </Text>
+          <TestScreen sensorKey={sensorKey} tab="semana" />
         </Tab>
       </Tabs>
     </Container>

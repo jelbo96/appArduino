@@ -47,7 +47,31 @@ const DetailsScreen = ({ navigation }) => {
         <View style={styles.viewContainer}>
           <Text>Selecciona un sensor para ver mas información. {'\n'}</Text>
 
-          {sensors.map((key) => (
+          {sensors.length > 0 ? (
+            sensors.map((key) => (
+              <Card>
+                <CardItem
+                  header
+                  button
+                  key={key}
+                  onPress={() => {
+                    navigation.navigate('Graphs', {
+                      sensorKey: key
+                    });
+                  }}
+                >
+                  <Text>{key}</Text>
+                  <Right style={styles.rightIcon}>
+                    <Icon name="arrow-forward" />
+                  </Right>
+                </CardItem>
+              </Card>
+            ))
+          ) : (
+            <Text>No se encontraron datos o no se configuró ningun sensor.</Text>
+          )}
+
+          {/*    {sensors.map((key) => (
             <Card>
               <CardItem
                 header
@@ -65,7 +89,7 @@ const DetailsScreen = ({ navigation }) => {
                 </Right>
               </CardItem>
             </Card>
-          ))}
+          ))} */}
         </View>
       </ScrollView>
     </SafeAreaView>

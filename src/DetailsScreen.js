@@ -5,12 +5,13 @@ import { Text, CardItem, Right, Card, Icon } from 'native-base';
 import Constants from 'expo-constants';
 
 import * as firebase from 'firebase';
+import CardLink from './DetailsScreen/CardLink';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const DetailsScreen = ({ navigation }) => {
+const DetailsScreen = () => {
   const [sensors, setSensors] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -48,48 +49,10 @@ const DetailsScreen = ({ navigation }) => {
           <Text>Selecciona un sensor para ver mas información. {'\n'}</Text>
 
           {sensors.length > 0 ? (
-            sensors.map((key) => (
-              <Card>
-                <CardItem
-                  header
-                  button
-                  key={key}
-                  onPress={() => {
-                    navigation.navigate('Graphs', {
-                      sensorKey: key
-                    });
-                  }}
-                >
-                  <Text>{key}</Text>
-                  <Right style={styles.rightIcon}>
-                    <Icon name="arrow-forward" />
-                  </Right>
-                </CardItem>
-              </Card>
-            ))
+            sensors.map((key) => <CardLink nameSensor={key} key={key} />)
           ) : (
             <Text>No se encontraron datos o no se configuró ningun sensor.</Text>
           )}
-
-          {/*    {sensors.map((key) => (
-            <Card>
-              <CardItem
-                header
-                button
-                key={key}
-                onPress={() => {
-                  navigation.navigate('Graphs', {
-                    sensorKey: key
-                  });
-                }}
-              >
-                <Text>{key}</Text>
-                <Right style={styles.rightIcon}>
-                  <Icon name="arrow-forward" />
-                </Right>
-              </CardItem>
-            </Card>
-          ))} */}
         </View>
       </ScrollView>
     </SafeAreaView>

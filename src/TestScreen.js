@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Text } from 'native-base';
 import { VictoryPie } from 'victory-native';
+
+import { LineChart } from 'react-native-chart-kit';
 
 /* import styles from './styles'; */
 
@@ -12,6 +14,22 @@ const defaultGraphicData = [{ y: 0 }, { y: 0 }, { y: 100 }]; // Data used to mak
 const TestScreen = (props) => {
   const [graphicData, setGraphicData] = useState(defaultGraphicData);
   const [refreshing, setRefreshing] = useState(false);
+
+  const initialData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 99, 43],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        strokeWidth: 2 // optional
+      }
+    ],
+    legend: ['Rainy Days'] // optional
+  };
+
+  const screenWidth = Dimensions.get('window').width * 0.9;
+
+  const chartConfig = {};
 
   useEffect(() => {
     setGraphicData(wantedGraphicData); // Setting the data that we want to display
@@ -31,14 +49,10 @@ const TestScreen = (props) => {
       <Text>
         Se está mostrando graficos para {props.sensorKey} en formato {props.tab}
       </Text>
-      <VictoryPie
-        animate={{ easing: 'exp' }}
-        data={graphicData}
-        width={250}
-        height={250}
-        colorScale={graphicColor}
-        innerRadius={50}
-      />
+
+      <View>
+        {/* <LineChart data={initialData} width={screenWidth} height={220} chartConfig={chartConfig} /> */}
+      </View>
 
       <Button refreshing={refreshing} onPress={onRefresh}>
         <Text> Recargar </Text>

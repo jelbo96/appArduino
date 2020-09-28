@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Header, Tab, Tabs, TabHeading, Icon, Text } from 'native-base';
 
-import TestScreen from './TestScreen';
+import GraphTest from './GraphTest';
 /* import Tab1 from './tabOne';
 import Tab2 from './tabTwo';
 import Tab3 from './tabThree'; */
@@ -18,7 +18,7 @@ const GraphsScren = ({ route }) => {
             </TabHeading>
           }
         >
-          <TestScreen sensorKey={sensorKey} tab="hora" />
+          <GraphTest sensorKey={sensorKey} tab="hora" />
         </Tab>
         <Tab
           heading={
@@ -27,7 +27,7 @@ const GraphsScren = ({ route }) => {
             </TabHeading>
           }
         >
-          <TestScreen sensorKey={sensorKey} tab="dia" />
+          <GraphTest sensorKey={sensorKey} tab="dia" />
         </Tab>
         <Tab
           heading={
@@ -36,7 +36,7 @@ const GraphsScren = ({ route }) => {
             </TabHeading>
           }
         >
-          <TestScreen sensorKey={sensorKey} tab="semana" />
+          <GraphTest sensorKey={sensorKey} tab="semana" />
         </Tab>
       </Tabs>
     </Container>

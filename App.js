@@ -12,6 +12,7 @@ import HomeScreen from './src/HomeScreen';
 import DetailsScreen from './src/DetailsScreen';
 import SettingsScreen from './src/SettingsScreen';
 import GraphsScreen from './src/GraphsScreen';
+import GetGraphData from './src/GetGraphData';
 
 const HomeStack = createStackNavigator();
 
@@ -73,7 +74,7 @@ function App() {
                 iconName = 'ios-analytics';
               } else if (route.name === 'Configuración') {
                 iconName = 'ios-settings';
-              } else if (route.name === 'Test') {
+              } else if (route.name === 'GetGraphData') {
                 iconName = 'ios-bug';
               }
 
@@ -85,10 +86,10 @@ function App() {
             inactiveTintColor: '#8e8e93'
           }}
         >
-          <Tab.Screen name="Detalles" component={DetailsStackScreen} />
+          <Tab.Screen name="GetGraphData" component={GetGraphData} />
           <Tab.Screen name="Inicio" component={HomeStackScreen} />
+          <Tab.Screen name="Detalles" component={DetailsStackScreen} />
           <Tab.Screen name="Configuración" component={SettingsStackScreen} />
-          {/*   <Tab.Screen name="Test" component={TestScreen} /> */}
         </Tab.Navigator>
       </NavigationContainer>
     </Root>

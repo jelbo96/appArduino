@@ -3,6 +3,11 @@ import { SafeAreaView } from 'react-native';
 import { Text, Button } from 'native-base';
 
 import * as firebase from 'firebase';
+import moment from 'moment';
+
+require('moment/locale/es');
+
+moment.locale('es');
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -11,21 +16,48 @@ if (!firebase.apps.length) {
 const sensorName = 'sensor2';
 
 const GetGraphData = () => {
+  const getRange = (upper, lower, steps) => {
+    const difference = upper - lower;
+    const increment = difference / (steps - 1);
+    return [
+      lower,
+      ...Array(steps - 2)
+        .fill('')
+        .map((_, index) => lower + increment * (index + 1)),
+      upper
+    ];
+  };
+
   const generateTimes = (primerValor, ultimoValor) => {
-    console.log('generateTimes', primerValor, ultimoValor);
-    return 0; // debe retornar un array con las horas a mostrar
+    const initialValue = new Date(primerValor);
+    const finalValue = new Date(ultimoValor);
+
+    // Convertir a timestamp primer y ultimo
+    const initialValueTimestamp = initialValue.getTime();
+    const finalValueTimestamp = finalValue.getTime();
+
+    // Obtener 3 timestamps intermedios
+    const arrayTimestamps = getRange(finalValueTimestamp, initialValueTimestamp, 5);
+
+    // Convertir a formato hh:mm
+    const arrayHours = arrayTimestamps.map((e) => {
+      return moment.utc(e).format('HH:mm');
+    });
+
+    // retornar el array
+    return arrayHours;
   };
 
   const manageData = (snapshot) => {
     const newSnapshot = JSON.stringify(snapshot);
 
-    /* console.log('manage_data:', newSnapshot); */
-
-    console.log(Object.keys(snapshot));
-
     // Obtener hora inicial-final (falta formatear esto)
-    const primerValor = Object.keys(snapshot)[0];
-    const ultimoValor = Object.keys(snapshot)[Object.keys(snapshot).length - 1];
+    const primerValor = moment
+      .utc(Object.keys(snapshot)[0])
+      .format('DD [de] MMMM [del] YYYY [a las:] HH:mm');
+    const ultimoValor = moment
+      .utc(Object.keys(snapshot)[Object.keys(snapshot).length - 1])
+      .format('DD [de] MMMM [del] YYYY [a las:] HH:mm');
 
     console.log('Datos obtenidos desde: ', primerValor, ' Hasta: ', ultimoValor);
 

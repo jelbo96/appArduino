@@ -48,8 +48,10 @@ const GetGraphData = () => {
     return arrayHours;
   };
 
-  const manageData = (snapshot) => {
-    const newSnapshot = JSON.stringify(snapshot);
+  const manageData = (data) => {
+    const snapshot = JSON.parse(JSON.stringify(data));
+
+    console.log('snapshot', snapshot, typeof snapshot);
 
     // Obtener hora inicial-final (falta formatear esto)
     const primerValor = moment
@@ -63,10 +65,13 @@ const GetGraphData = () => {
 
     // Generar timestamps intermedios
     const times = generateTimes(primerValor, ultimoValor);
+    console.log('times', times);
 
     // Llenar array de datos
     const values = Object.values(snapshot);
 
+    /* console.log('values', values);
+     */
     const temperaturas = [];
     const humedades = [];
     const luminosidades = [];
@@ -77,21 +82,23 @@ const GetGraphData = () => {
       humedades.push(e.humidity);
       luminosidades.push(e.light);
     });
+
+    /*  console.log(temperaturas, humedades, luminosidades); */
   };
 
   const GetData = () => {
     console.log('Obteniendo datos...');
 
     /* Retorna el snapshot */
-    /* firebase
+    firebase
       .database()
       .ref(`/${sensorName}`)
       .limitToLast(5)
       .once('value', function (snapshot) {
         manageData(snapshot);
-      }); */
+      });
 
-    const snapshot = {
+    /*  const snapshot = {
       '2020-09-20T19:18:57Z': {
         humidity: 52,
         light: 32.71484,
@@ -124,7 +131,7 @@ const GetGraphData = () => {
       }
     };
 
-    manageData(snapshot);
+    manageData(snapshot); */
 
     /* Sacar el primer y ultimo key, con eso se puede mostrar: data obtenida desde DIA-HORA hasta DIA-HORA */
 

@@ -13,7 +13,7 @@ const CardLink = (props) => {
         button
         onPress={() => {
           navigation.navigate('Graphs', {
-            sensorKey: 'sensor1' /*  props.nameSensor */
+            sensorKey: props.nameSensor
           });
         }}
       >

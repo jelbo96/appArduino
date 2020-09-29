@@ -86,7 +86,7 @@ function App() {
             inactiveTintColor: '#8e8e93'
           }}
         >
-          <Tab.Screen name="GetGraphData" component={GetGraphData} />
+          {/*  <Tab.Screen name="GetGraphData" component={GetGraphData} /> */}
           <Tab.Screen name="Inicio" component={HomeStackScreen} />
           <Tab.Screen name="Detalles" component={DetailsStackScreen} />
           <Tab.Screen name="Configuración" component={SettingsStackScreen} />

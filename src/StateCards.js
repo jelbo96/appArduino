@@ -22,6 +22,18 @@ const StateCards = (props) => {
             </View>
             <Text style={styles.numberDataText}>{props.temp} °C </Text>
           </Body>
+
+          {props.temp_probe ? (
+            <Body>
+              <View style={styles.inline}>
+                <FontAwesome5 name="temperature-low" size={16} color="black" />
+                <Text> Temperatura (suelo)</Text>
+              </View>
+              <Text style={styles.numberDataText}>{props.temp_probe} °C </Text>
+            </Body>
+          ) : (
+            <></>
+          )}
         </CardItem>
       </Card>
 
@@ -34,6 +46,17 @@ const StateCards = (props) => {
             </View>
             <Text style={styles.numberDataText}>{props.hum} % </Text>
           </Body>
+          {props.hum_probe ? (
+            <Body>
+              <View style={styles.inline}>
+                <FontAwesome5 name="temperature-low" size={16} color="black" />
+                <Text> Humedad (suelo)</Text>
+              </View>
+              <Text style={styles.numberDataText}>{props.hum_probe} °C </Text>
+            </Body>
+          ) : (
+            <></>
+          )}
         </CardItem>
       </Card>
 

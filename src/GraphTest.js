@@ -17,10 +17,10 @@ if (!firebase.apps.length) {
 
 const GraphTest = (props) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [graphLabels, setGraphLabels] = useState(['Ene', 'Feb', 'Mar', 'Abr', 'May']);
-  const [dataTemperature, setDataTemperature] = useState([24, 33, 22, 34, 43]);
-  const [dataHumidity, setDataHumidity] = useState([23, 31, 45, 52, 42]);
-  const [dataLight, setDataLight] = useState([27, 32, 35, 30, 28]);
+  const [graphLabels, setGraphLabels] = useState(['...', '...']);
+  const [dataTemperature, setDataTemperature] = useState([1, 1]);
+  const [dataHumidity, setDataHumidity] = useState([2, 2]);
+  const [dataLight, setDataLight] = useState([3, 3]);
   const [initialTime, setInitialTime] = useState('...');
   const [finalTime, setFinalTime] = useState('...');
 
@@ -68,10 +68,10 @@ const GraphTest = (props) => {
     // Obtener hora inicial-final (falta formatear esto)
     const primerValor = moment
       .utc(Object.keys(snapshot)[0])
-      .format('DD [de] MMMM [del] YYYY [a las:] HH:mm');
+      .format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]');
     const ultimoValor = moment
       .utc(Object.keys(snapshot)[Object.keys(snapshot).length - 1])
-      .format('DD [de] MMMM [del] YYYY [a las:] HH:mm');
+      .format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]');
 
     setInitialTime(primerValor);
     setFinalTime(ultimoValor);
@@ -117,45 +117,6 @@ const GraphTest = (props) => {
       .once('value', function (snapshot) {
         manageData(snapshot);
       });
-
-    /* const snapshot = {
-      '2020-09-20T19:18:57Z': {
-        humidity: 52,
-        light: 32.71484,
-        temperature: 21.8,
-        timestamp: 1600629000
-      },
-      '2020-09-20T19:19:07Z': {
-        humidity: 53,
-        light: 32.32422,
-        temperature: 22.2,
-        timestamp: 1600629000
-      },
-      '2020-09-20T19:19:17Z': {
-        humidity: 52,
-        light: 32.42188,
-        temperature: 21,
-        timestamp: 1600629000
-      },
-      '2020-09-20T19:19:27Z': {
-        humidity: 53,
-        light: 32.51953,
-        temperature: 22.2,
-        timestamp: 1600629000
-      },
-      '2020-09-20T19:19:37Z': {
-        humidity: 53,
-        light: 31.54297,
-        temperature: 22.2,
-        timestamp: 1600630000
-      }
-    };
-
-    manageData(snapshot); */
-
-    /* Sacar el primer y ultimo key, con eso se puede mostrar: data obtenida desde DIA-HORA hasta DIA-HORA */
-
-    /* A partir del primer y ultimo TIMESTAMP tambien sacar timestamps entremedio para poner en el grafico */
   };
 
   const initialData = {
@@ -216,7 +177,7 @@ const GraphTest = (props) => {
         chartConfig={chartConfig}
         bezier
       />
-      <Text style={styles.textPadding}>
+      <Text style={styles.lastUpdate}>
         Información obtenida desde el {initialTime} hasta el {finalTime}
       </Text>
     </View>
@@ -229,6 +190,11 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   textPadding: {
+    padding: 20
+  },
+  lastUpdate: {
+    fontSize: 12,
+    color: '#616161',
     padding: 20
   }
 });

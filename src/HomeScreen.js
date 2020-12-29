@@ -51,9 +51,11 @@ const HomeScreen = () => {
               temp: value.temperature,
               hum: value.humidity,
               light: value.light.toFixed(2),
+              hum_probe: value.humidity_probe,
+              temp_probe: value.temperature_probe,
               time: moment(new Date(value.timestamp * 1000).toISOString()).fromNow()
             };
-            /*  console.log('se esta agregando data ....'); */
+            console.log('se esta agregando data ....');
 
             setSensorDataArray((sensorDataArray) => sensorDataArray.concat(sensorData));
           });
@@ -96,15 +98,16 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollView}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      >
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         {sensorDataArray.length > 0 ? (
           sensorDataArray.map((data) => (
             <StateCards
               key={data.name} // data.name
               name={data.name}
               temp={data.temp}
+              temp_probe={data.temp_probe}
               hum={data.hum}
+              hum_probe={data.hum_probe}
               lum={data.light}
               time={data.time}
             />

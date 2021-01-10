@@ -17,12 +17,12 @@ if (!firebase.apps.length) {
 
 const GraphTest = (props) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [graphLabels, setGraphLabels] = useState(['...', '...']);
-  const [dataTemperature, setDataTemperature] = useState([1, 1]);
-  const [dataHumidity, setDataHumidity] = useState([2, 2]);
-  const [dataLight, setDataLight] = useState([3, 3]);
-  const [initialTime, setInitialTime] = useState('...');
-  const [finalTime, setFinalTime] = useState('...');
+  const [graphLabels, setGraphLabels] = useState(['...']);
+  const [dataTemperature, setDataTemperature] = useState([1]);
+  const [dataHumidity, setDataHumidity] = useState([2]);
+  const [dataLight, setDataLight] = useState([3]);
+  const [initialTime, setInitialTime] = useState(`${new Date().toISOString().split('.')[0]}Z`);
+  const [finalTime, setFinalTime] = useState(`${new Date().toISOString().split('.')[0]}Z`);
 
   const getRange = (upper, lower, steps) => {
     const difference = upper - lower;
@@ -34,6 +34,36 @@ const GraphTest = (props) => {
         .map((_, index) => lower + increment * (index + 1)),
       upper
     ];
+  };
+
+  const manageDate = (tab) => {
+    const actualDate = new Date();
+    const previusDate = new Date();
+
+    /*  ESTO HAY QUE CAMBIARLO */
+    previusDate.setDate(previusDate.getDate() - 60);
+    actualDate.setDate(previusDate.getDate() - 60);
+
+    console.log('se entro a manage_date', tab);
+    switch (tab) {
+      case 'hora':
+        console.log('se entro a hora');
+        previusDate.setHours(previusDate.getHours() - 0.5);
+        break;
+      case 'dia':
+        console.log('se entro a dia');
+        previusDate.setHours(previusDate.getHours() - 1);
+        break;
+      case 'semana':
+        console.log('se entro a semana');
+        previusDate.setHours(previusDate.getHours() - 1.5);
+        break;
+      default:
+        console.log('no se encontro tab');
+        break;
+    }
+    setInitialTime(`${previusDate.toISOString().split('.')[0]}Z`);
+    setFinalTime(`${actualDate.toISOString().split('.')[0]}Z`);
   };
 
   const generateTimes = (primerValor, ultimoValor) => {
@@ -57,63 +87,73 @@ const GraphTest = (props) => {
   };
 
   const manageData = (data) => {
+    console.log('data?', data);
+
     console.log('1');
 
     const snapshot = JSON.parse(JSON.stringify(data));
+    if (snapshot) {
+      console.log('2');
 
-    console.log('2');
+      console.log('snapshot?', snapshot);
 
-    console.log(snapshot);
+      // Obtener hora inicial-final (falta formatear esto)
+      const primerValor = moment.utc(Object.keys(snapshot)[0]);
 
-    // Obtener hora inicial-final (falta formatear esto)
-    const primerValor = moment
-      .utc(Object.keys(snapshot)[0])
-      .format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]');
-    const ultimoValor = moment
-      .utc(Object.keys(snapshot)[Object.keys(snapshot).length - 1])
-      .format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]');
+      const ultimoValor = moment.utc(Object.keys(snapshot)[Object.keys(snapshot).length - 1]);
 
-    setInitialTime(primerValor);
-    setFinalTime(ultimoValor);
+      /*
+      setInitialTime(primerValor);
+      setFinalTime(ultimoValor);
+      */
 
-    console.log('Datos obtenidos desde: ', primerValor, ' Hasta: ', ultimoValor);
+      console.log(
+        'Datos obtenidos desde: ',
+        primerValor.format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]'),
+        ' Hasta: ',
+        ultimoValor.format('DD [de] MMMM [del] YYYY [a las] HH:mm [hrs]')
+      );
 
-    // Generar timestamps intermedios
-    const times = generateTimes(
-      Object.keys(snapshot)[0],
-      Object.keys(snapshot)[Object.keys(snapshot).length - 1]
-    ); //
-    setGraphLabels(times);
+      // Generar timestamps intermedios
+      const times = generateTimes(
+        Object.keys(snapshot)[0],
+        Object.keys(snapshot)[Object.keys(snapshot).length - 1]
+      ); //
+      setGraphLabels(times);
 
-    // Llenar array de datos
-    const values = Object.values(snapshot);
+      // Llenar array de datos
+      const values = Object.values(snapshot);
 
-    const temperaturas = [];
-    const humedades = [];
-    const luminosidades = [];
+      const temperaturas = [];
+      const humedades = [];
+      const luminosidades = [];
 
-    values.forEach((e) => {
-      /* console.log('temp', e.temperature, 'hu', e.humidity, 'l', e.light, 'time', e.timestamp); */
-      temperaturas.push(e.temperature);
-      humedades.push(e.humidity);
-      luminosidades.push(e.light);
-    });
+      values.forEach((e) => {
+        console.log('temp', e.temperature, 'hu', e.humidity, 'l', e.light, 'time', e.timestamp);
+        if (e.temperature < 100 && e.humidity < 100 && e.light < 100) {
+          temperaturas.push(e.temperature);
+          humedades.push(e.humidity);
+          luminosidades.push(e.light);
+        }
+      });
 
-    setDataTemperature(temperaturas);
-    setDataHumidity(humedades);
-    setDataLight(luminosidades);
+      setDataTemperature(temperaturas);
+      setDataHumidity(humedades);
+      setDataLight(luminosidades);
 
-    console.log('temp', dataTemperature, 'lum', dataLight, 'hum', dataHumidity);
+      console.log('temp', dataTemperature, 'lum', dataLight, 'hum', dataHumidity);
+    }
   };
 
   const getData = () => {
-    console.log('Obteniendo datos...');
+    console.log('Obteniendo datos...', initialTime, finalTime);
 
-    /* Retorna el snapshot */
-    firebase
-      .database()
-      .ref(`/${props.sensorKey}`)
-      .limitToLast(5)
+    const ref = firebase.database().ref('/sensor4');
+
+    ref
+      .orderByKey()
+      .startAt(initialTime)
+      .endAt(finalTime)
       .once('value', function (snapshot) {
         manageData(snapshot);
       });
@@ -154,21 +194,15 @@ const GraphTest = (props) => {
 
   useEffect(() => {
     console.log('useEffect');
+    manageDate(props.tab);
     getData();
-  }, []);
-
-  /*   const onRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    setDataHumidity([12, 12, 43, 12, 43]);
-    setRefreshing(false);
-    console.log('recargando');
-  }, [refreshing]); */
+  }, [initialTime, finalTime]);
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.textPadding}>
+      <Text style={styles.textPadding}>
         Se está mostrando graficos para {props.sensorKey} en formato {props.tab}
-      </Text> */}
+      </Text>
 
       <LineChart
         data={initialData}

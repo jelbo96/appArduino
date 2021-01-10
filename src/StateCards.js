@@ -49,10 +49,10 @@ const StateCards = (props) => {
           {props.hum_probe ? (
             <Body>
               <View style={styles.inline}>
-                <FontAwesome5 name="temperature-low" size={16} color="black" />
+                <Ionicons name="ios-water" size={16} color="black" />
                 <Text> Humedad (suelo)</Text>
               </View>
-              <Text style={styles.numberDataText}>{props.hum_probe} °C </Text>
+              <Text style={styles.numberDataText}>{props.hum_probe} % </Text>
             </Body>
           ) : (
             <></>

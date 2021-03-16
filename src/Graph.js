@@ -15,7 +15,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const GraphTest = (props) => {
+const Graph = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [graphLabels, setGraphLabels] = useState(['...']);
   const [dataTemperature, setDataTemperature] = useState([1]);
@@ -233,4 +233,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default GraphTest;
+export default Graph;

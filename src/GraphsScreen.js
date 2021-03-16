@@ -1,10 +1,9 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
+
 import { Container, Header, Tab, Tabs, TabHeading, Icon, Text } from 'native-base';
 
-import GraphTest from './GraphTest';
-/* import Tab1 from './tabOne';
-import Tab2 from './tabTwo';
-import Tab3 from './tabThree'; */
+import Graph from './Graph';
 
 const GraphsScren = ({ route }) => {
   const { sensorKey } = route.params;
@@ -13,34 +12,43 @@ const GraphsScren = ({ route }) => {
       <Tabs tabBarUnderlineStyle={{ borderBottomWidth: 4, borderBottomColor: '#007bff' }}>
         <Tab
           heading={
-            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
-              <Text style={{ color: 'black' }}>Hora</Text>
+            <TabHeading style={styles.tabHeading}>
+              <Text style={styles.tabTextHeading}>Hora</Text>
             </TabHeading>
           }
         >
-          <GraphTest sensorKey={sensorKey} tab="hora" />
+          <Graph sensorKey={sensorKey} tab="hora" />
         </Tab>
         <Tab
           heading={
-            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
-              <Text style={{ color: 'black' }}>Día</Text>
+            <TabHeading style={styles.tabHeading}>
+              <Text style={styles.tabTextHeading}>Día</Text>
             </TabHeading>
           }
         >
-          <GraphTest sensorKey={sensorKey} tab="dia" />
+          <Graph sensorKey={sensorKey} tab="dia" />
         </Tab>
         <Tab
           heading={
-            <TabHeading style={{ backgroundColor: '#f2f2f2' }}>
-              <Text style={{ color: 'black' }}>Semana</Text>
+            <TabHeading style={styles.tabHeading}>
+              <Text style={styles.tabTextHeading}>Semana</Text>
             </TabHeading>
           }
         >
-          <GraphTest sensorKey={sensorKey} tab="semana" />
+          <Graph sensorKey={sensorKey} tab="semana" />
         </Tab>
       </Tabs>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  tabHeading: {
+    backgroundColor: '#f2f2f2'
+  },
+  tabTextHeading: {
+    color: 'black'
+  }
+});
 
 export default GraphsScren;
